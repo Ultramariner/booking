@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: payment
+    registrator:
+      url: http://localhost:8081/registrator/
+
+  data:
+
+server:
+  port: 8082
