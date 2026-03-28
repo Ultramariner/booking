@@ -30,4 +30,4 @@ server:
 
 services:
   registrator:
-    url: http://localhost:8081/registrator/
+    url: http://localhost:8081/registrator

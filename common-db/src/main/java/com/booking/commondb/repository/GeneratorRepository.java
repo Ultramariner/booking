@@ -5,8 +5,9 @@ import com.booking.commondb.entity.GeneratedEntityStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GeneratorRepository extends JpaRepository<GeneratedEntity, Long> {
 
-    List<GeneratedEntity> findAllByStatus(GeneratedEntityStatus status);
+    Optional<GeneratedEntity> findFirstByStatusOrderByCreatedAtAsc(GeneratedEntityStatus status);
 }
