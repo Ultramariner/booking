@@ -19,7 +19,14 @@ public class PaymentInfo {
     @UuidGenerator
     private UUID uid;
 
+    private Long bookingId;
+
     private String person;
+
     private Double amount;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+
     private Instant processedAt;
 }
