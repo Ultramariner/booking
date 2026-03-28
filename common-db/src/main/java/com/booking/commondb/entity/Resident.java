@@ -18,5 +18,7 @@ public class Resident {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long generatedId;
+
     private String name;
 }

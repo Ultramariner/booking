@@ -49,6 +49,8 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
 
+            <column name="generated_id" type="BIGINT"/>
+
             <column name="name" type="VARCHAR(255)"/>
         </createTable>
 
@@ -80,7 +82,11 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="info" type="VARCHAR(500)"/>
+            <column name="booked_at" type="TIMESTAMP WITH TIME ZONE"/>
+
+            <column name="booking_status" type="VARCHAR(50)"/>
+
+            <column name="payment_uid" type="UUID"/>
         </createTable>
 
         <addForeignKeyConstraint
@@ -102,8 +108,30 @@
                 referencedTableSchemaName="${db.schema}"/>
 
         <rollback>
-            <dropTable tableName="booking_info" schemaName="${db.schema}"/>
+            <dropColumn tableName="booking_info" columnName="payment_status" schemaName="${db.schema}"/>
+            <dropColumn tableName="booking_info" columnName="payment_uid" schemaName="${db.schema}"/>
         </rollback>
     </changeSet>
+
+    <changeSet id="registrator-004-insert-apartments" author="team-registrator">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="apartment" schemaName="${db.schema}"/>
+        </preConditions>
+
+        <sql>
+            INSERT INTO ${db.schema}.apartment (number, floor, number_of_rooms, is_vacant) VALUES
+                                                                                               (101, 1, 1, TRUE),
+                                                                                               (202, 2, 2, TRUE),
+                                                                                               (303, 3, 3, TRUE),
+                                                                                               (404, 4, 2, TRUE),
+                                                                                               (505, 5, 1, TRUE);
+        </sql>
+
+        <rollback>
+            DELETE FROM ${db.schema}.apartment
+            WHERE number IN (101, 202, 303, 404, 505);
+        </rollback>
+    </changeSet>
+
 
 </databaseChangeLog>
