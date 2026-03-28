@@ -1,4 +1,5 @@
-package com.booking.registrator.entity;
+package com.booking.commondb.entity;
+
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,11 +15,16 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Resident {
+public class GeneratedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String booker;
+    private Instant createdAt;
+    private Instant lastModifiedAt;
+
+    @Enumerated(EnumType.STRING)
+    private GeneratedEntityStatus status;
 }

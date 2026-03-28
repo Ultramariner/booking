@@ -1,4 +1,4 @@
-package com.booking.registrator.entity;
+package com.booking.commondb.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,15 +12,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Apartment {
+public class Resident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long number;
-    private Long floor;
-    private Long numberOfRooms;
-    private Boolean isVacant;
-
+    private String name;
 }

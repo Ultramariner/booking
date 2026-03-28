@@ -1,7 +1,7 @@
-package com.booking.generator.repository;
+package com.booking.commondb.repository;
 
-import com.booking.generator.entity.GeneratedEntity;
-import com.booking.generator.entity.GeneratedEntityStatus;
+import com.booking.commondb.entity.GeneratedEntity;
+import com.booking.commondb.entity.GeneratedEntityStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

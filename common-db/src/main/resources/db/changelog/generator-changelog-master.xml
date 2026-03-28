@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <property name="db.schema" value="generator_schema"/>
+
+    <changeSet id="generator-001-create-generated-entity" author="team-generator">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="generated_entity" schemaName="${db.schema}"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="generated_entity" schemaName="${db.schema}">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="booker" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="last_modified_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="idx_generated_entity_booker" tableName="generated_entity" schemaName="${db.schema}">
+            <column name="booker"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable tableName="generated_entity" schemaName="${db.schema}"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,20 +1,33 @@
 spring:
   application:
     name: generator
-    registrator:
-      url: http://localhost:8081/registrator/
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/example
+    url: jdbc:postgresql://localhost:5432/booking
     username: admin
     password: "password"
+
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: false
+    properties:
+      hibernate:
+        default_schema: generator_schema
+        format_sql: false
+
   liquibase:
     enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yml
+    change-log: classpath:db/changelog/generator-changelog-master.xml
+    default_schema: generator_schema
+    liquibase-schema: liquibase_history
+    database-change-log-table: databasechangelog_generator
+    database-change-log-lock-table: databasechangeloglock_generator
 
 server:
   port: 8080
+
+services:
+  registrator:
+    url: http://localhost:8081/registrator/

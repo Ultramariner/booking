@@ -1,6 +1,6 @@
-package com.booking.registrator.repository;
+package com.booking.commondb.repository;
 
-import com.booking.registrator.entity.Resident;
+import com.booking.commondb.entity.Resident;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ResidentRepository extends JpaRepository<Resident, Long> {

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <property name="db.schema" value="registrator_schema"/>
+
+    <!-- ======================= -->
+    <!--   Таблица apartment     -->
+    <!-- ======================= -->
+    <changeSet id="registrator-001-create-apartment" author="team-registrator">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="apartment" schemaName="${db.schema}"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="apartment" schemaName="${db.schema}">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="number" type="BIGINT"/>
+            <column name="floor" type="BIGINT"/>
+            <column name="number_of_rooms" type="BIGINT"/>
+            <column name="is_vacant" type="BOOLEAN"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="apartment" schemaName="${db.schema}"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ======================= -->
+    <!--   Таблица resident      -->
+    <!-- ======================= -->
+    <changeSet id="registrator-002-create-resident" author="team-registrator">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="resident" schemaName="${db.schema}"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="resident" schemaName="${db.schema}">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="resident" schemaName="${db.schema}"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ======================= -->
+    <!--   Таблица booking_info  -->
+    <!-- ======================= -->
+    <changeSet id="registrator-003-create-booking-info" author="team-registrator">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="booking_info" schemaName="${db.schema}"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="booking_info" schemaName="${db.schema}">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="apartment_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="resident_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="info" type="VARCHAR(500)"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="booking_info"
+                baseColumnNames="apartment_id"
+                constraintName="fk_booking_info_apartment"
+                referencedTableName="apartment"
+                referencedColumnNames="id"
+                baseTableSchemaName="${db.schema}"
+                referencedTableSchemaName="${db.schema}"/>
+
+        <addForeignKeyConstraint
+                baseTableName="booking_info"
+                baseColumnNames="resident_id"
+                constraintName="fk_booking_info_resident"
+                referencedTableName="resident"
+                referencedColumnNames="id"
+                baseTableSchemaName="${db.schema}"
+                referencedTableSchemaName="${db.schema}"/>
+
+        <rollback>
+            <dropTable tableName="booking_info" schemaName="${db.schema}"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,9 +1,11 @@
-package com.booking.payment.entity;
+package com.booking.commondb.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table
@@ -14,7 +16,8 @@ import java.time.Instant;
 public class PaymentInfo {
 
     @Id
-    private String uid;
+    @UuidGenerator
+    private UUID uid;
 
     private String person;
     private Double amount;

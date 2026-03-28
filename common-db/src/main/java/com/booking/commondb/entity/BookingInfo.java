@@ -1,4 +1,4 @@
-package com.booking.registrator.entity;
+package com.booking.commondb.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

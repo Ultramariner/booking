@@ -1,4 +1,4 @@
-package com.booking.generator.entity;
+package com.booking.commondb.entity;
 
 public enum GeneratedEntityStatus {
 
