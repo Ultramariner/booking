@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+
+  generator:
+    build:
+      context: ./generator
+    container_name: generator-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/booking
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
+
+      SERVICES_REGISTRATOR_URL: http://registrator:8081/registrator
+    ports:
+      - "8080:8080"
+    depends_on:
+      - registrator
+
+  registrator:
+    build:
+      context: ./registrator
+    container_name: registrator-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/booking
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
+
+      SERVICES_GENERATOR_URL: http://generator:8080/generator
+      SERVICES_PAYMENT_URL: http://payment:8082/payment
+    ports:
+      - "8081:8081"
+    depends_on:
+      - payment
+
+  payment:
+    build:
+      context: ./payment
+    container_name: payment-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/booking
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
+
+      SERVICES_REGISTRATOR_URL: http://registrator:8081/registrator
+    ports:
+      - "8082:8082"
