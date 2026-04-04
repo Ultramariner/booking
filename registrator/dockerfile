@@ -2,15 +2,17 @@
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
-COPY pom.xml .
-COPY src ./src
+COPY common-db ./common-db
+RUN mvn -q -e -DskipTests -f common-db/pom.xml install
 
-RUN mvn -q -e -DskipTests package
+COPY registrator ./registrator
+
+RUN mvn -q -e -DskipTests -f registrator/pom.xml package
 
 # ---------- Run ----------
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-COPY --from=build /app/target/registrator-*.jar app.jar
+COPY --from=build /app/registrator/target/registrator-*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
