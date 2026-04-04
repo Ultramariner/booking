@@ -13,6 +13,7 @@ import com.booking.registrator.service.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -71,7 +72,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 new PaymentCheckRequest(
                         booking.getId(),
                         booking.getResident().getName(),
-                        1000.0
+                        BigDecimal.valueOf(1000)
                 )
         );
 

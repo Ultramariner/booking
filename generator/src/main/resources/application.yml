@@ -4,18 +4,14 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/booking
-    username: admin
-    password: "password"
+    url: jdbc:postgresql://host.docker.internal:5432/booking
+    username: postgres
+    password: "postgres"
 
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: false
-    properties:
-      hibernate:
-        default_schema: generator_schema
-        format_sql: false
 
   liquibase:
     enabled: true
@@ -30,4 +26,4 @@ server:
 
 services:
   registrator:
-    url: http://localhost:8081/registrator
+    url: http://registrator:8081/registrator

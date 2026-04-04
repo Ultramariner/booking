@@ -4,9 +4,9 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/booking
-    username: admin
-    password: "password"
+    url: jdbc:postgresql://host.docker.internal:5432/booking
+    username: postgres
+    password: "postgres"
 
   jpa:
     hibernate:
@@ -26,6 +26,6 @@ server:
 
 services:
   generator:
-    url: http://localhost:8080/generator
+    url: http://generator:8080/generator
   payment:
-    url: http://localhost:8082/payment
+    url: http://payment:8082/payment

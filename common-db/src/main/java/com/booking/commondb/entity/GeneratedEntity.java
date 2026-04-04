@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.Instant;
 
 @Entity
-@Table
+@Table(name = "generated_entity", schema = "generator_schema")
 @Getter
 @Setter
 @NoArgsConstructor

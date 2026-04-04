@@ -6,7 +6,7 @@ import com.booking.commondb.entity.PaymentInfo;
 import com.booking.commondb.entity.PaymentStatus;
 import com.booking.commondb.repository.PaymentInfoRepository;
 import com.booking.payment.service.PaymentService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentInfoRepository paymentInfoRepository;

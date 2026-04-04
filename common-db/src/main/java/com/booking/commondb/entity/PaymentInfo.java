@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "payment_info", schema = "payment_schema")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +24,7 @@ public class PaymentInfo {
 
     private String person;
 
-    private Double amount;
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
