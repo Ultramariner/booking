@@ -6,7 +6,6 @@
           http://www.liquibase.org/xml/ns/dbchangelog
           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- Параметр схемы -->
     <property name="db.schema" value="payment_schema"/>
 
     <changeSet id="payment-001-create-payment-info" author="team-payment">

@@ -29,7 +29,6 @@ public class PaymentServiceImpl implements PaymentService {
         boolean approved = ThreadLocalRandom.current().nextDouble() <= successProbability;
 
         PaymentInfo info = new PaymentInfo();
-        info.setUid(UUID.randomUUID());
         info.setBookingId(request.bookingId());
         info.setPerson(request.person());
         info.setAmount(request.amount());

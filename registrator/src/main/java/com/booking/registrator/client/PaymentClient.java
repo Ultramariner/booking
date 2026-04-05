@@ -18,7 +18,7 @@ public class PaymentClient {
 
     public PaymentCheckResponse checkPayment(PaymentCheckRequest request) {
         return restTemplate.postForObject(
-                paymentUrl + "/payment/check",
+                paymentUrl + "/check",
                 request,
                 PaymentCheckResponse.class
         );
