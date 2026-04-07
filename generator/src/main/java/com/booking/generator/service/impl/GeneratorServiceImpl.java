@@ -1,10 +1,14 @@
 package com.booking.generator.service.impl;
 
-import com.booking.commondb.dto.BookingResponse;
+import com.booking.commondb.dto.BookingRequestDb;
 import com.booking.commondb.entity.GeneratedEntity;
 import com.booking.commondb.entity.GeneratedEntityStatus;
 import com.booking.commondb.repository.GeneratorRepository;
-import com.booking.generator.client.RegistratorClient;
+import com.booking.feignclients.clients.RegistratorClient;
+import com.booking.feignclients.dto.BookingRequest;
+import com.booking.feignclients.dto.BookingResponse;
+import com.booking.generator.mapper.BookingRequestMapper;
+import com.booking.generator.mapper.GeneratedEntityMapper;
 import com.booking.generator.service.GeneratorService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,8 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     private final GeneratorRepository generatorRepository;
     private final RegistratorClient registratorClient;
+    private final GeneratedEntityMapper generatedEntityMapper;
+    private final BookingRequestMapper bookingRequestMapper;
 
     @Override
     public void generate() {
@@ -43,22 +49,21 @@ public class GeneratorServiceImpl implements GeneratorService {
         GeneratedEntity entity = optional.get();
 
         try {
-            BookingResponse response =
-                    registratorClient.sendBooking(entity.getId(), entity.getBooker());
+            BookingRequestDb dbDto = generatedEntityMapper.toDb(entity);
 
-            if (response.success()) {
-                entity.setStatus(GeneratedEntityStatus.BOOKED);
-            } else {
-                entity.setStatus(GeneratedEntityStatus.DENIED);
-            }
+            BookingRequest feignDto = bookingRequestMapper.toFeign(dbDto);
 
-            entity.setLastModifiedAt(Instant.now());
+            BookingResponse response = registratorClient.sendBooking(feignDto);
+
+            entity.setStatus(response.success()
+                    ? GeneratedEntityStatus.BOOKED
+                    : GeneratedEntityStatus.DENIED);
 
         } catch (Exception ex) {
             entity.setStatus(GeneratedEntityStatus.FAILED);
-            entity.setLastModifiedAt(Instant.now());
         }
 
+        entity.setLastModifiedAt(Instant.now());
         generatorRepository.save(entity);
     }
 

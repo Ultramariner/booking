@@ -5,6 +5,9 @@ WORKDIR /app
 COPY common-db ./common-db
 RUN mvn -q -e -DskipTests -f common-db/pom.xml install
 
+COPY feign-clients ./feign-clients
+RUN mvn -q -e -DskipTests -f feign-clients/pom.xml install
+
 COPY registrator ./registrator
 
 RUN mvn -q -e -DskipTests -f registrator/pom.xml package

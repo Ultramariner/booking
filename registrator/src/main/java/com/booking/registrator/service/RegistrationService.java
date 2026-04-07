@@ -2,18 +2,18 @@ package com.booking.registrator.service;
 
 import com.booking.commondb.entity.Apartment;
 import com.booking.commondb.entity.BookingInfo;
-import com.booking.commondb.dto.BookingRequest;
-import com.booking.commondb.dto.BookingResponse;
+import com.booking.commondb.dto.BookingRequestDb;
+import com.booking.feignclients.dto.BookingResponse;
 
 import java.util.Optional;
 
 public interface RegistrationService {
 
-    BookingResponse register(BookingRequest request);
+    BookingResponse register(BookingRequestDb request);
 
     Optional<Apartment> checkApartments();
 
-    BookingInfo createBooking(Apartment apartment, BookingRequest request);
+    BookingInfo createBooking(Apartment apartment, BookingRequestDb request);
 
     BookingResponse checkPayment(BookingInfo booking);
 }

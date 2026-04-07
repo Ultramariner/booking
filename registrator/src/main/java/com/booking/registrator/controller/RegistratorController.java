@@ -1,7 +1,7 @@
 package com.booking.registrator.controller;
 
-import com.booking.commondb.dto.BookingRequest;
-import com.booking.commondb.dto.BookingResponse;
+import com.booking.commondb.dto.BookingRequestDb;
+import com.booking.feignclients.dto.BookingResponse;
 import com.booking.registrator.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class RegistratorController {
     private final RegistrationService registrationService;
 
     @PostMapping("/register")
-    public ResponseEntity<BookingResponse> register(@RequestBody BookingRequest request) {
+    public ResponseEntity<BookingResponse> register(@RequestBody BookingRequestDb request) {
         return ResponseEntity.ok(registrationService.register(request));
     }
 

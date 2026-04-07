@@ -7,8 +7,12 @@ import com.booking.commondb.entity.Resident;
 import com.booking.commondb.repository.ApartmentRepository;
 import com.booking.commondb.repository.BookingInfoRepository;
 import com.booking.commondb.repository.ResidentRepository;
-import com.booking.registrator.client.PaymentClient;
+import com.booking.feignclients.clients.PaymentClient;
+import com.booking.feignclients.dto.BookingResponse;
+import com.booking.feignclients.dto.PaymentCheckRequest;
+import com.booking.feignclients.dto.PaymentCheckResponse;
 import com.booking.commondb.dto.*;
+import com.booking.registrator.mapper.PaymentRequestMapper;
 import com.booking.registrator.service.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,9 +29,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final ResidentRepository residentRepository;
     private final BookingInfoRepository bookingInfoRepository;
     private final PaymentClient paymentClient;
+    private final PaymentRequestMapper paymentRequestMapper;
 
     @Override
-    public BookingResponse register(BookingRequest request) {
+    public BookingResponse register(BookingRequestDb request) {
 
         Optional<Apartment> optional = checkApartments();
         if (optional.isEmpty()) {
@@ -35,7 +40,6 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
 
         Apartment apartment = optional.get();
-
         BookingInfo booking = createBooking(apartment, request);
 
         return checkPayment(booking);
@@ -47,7 +51,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public BookingInfo createBooking(Apartment apartment, BookingRequest request) {
+    public BookingInfo createBooking(Apartment apartment, BookingRequestDb request) {
 
         apartment.setIsVacant(false);
         apartmentRepository.save(apartment);
@@ -68,13 +72,15 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public BookingResponse checkPayment(BookingInfo booking) {
 
-        PaymentCheckResponse paymentResponse = paymentClient.checkPayment(
-                new PaymentCheckRequest(
-                        booking.getId(),
-                        booking.getResident().getName(),
-                        BigDecimal.valueOf(1000)
-                )
+        PaymentCheckRequestDb dbDto = new PaymentCheckRequestDb(
+                booking.getId(),
+                booking.getResident().getName(),
+                BigDecimal.valueOf(1000)
         );
+
+        PaymentCheckRequest feignDto = paymentRequestMapper.toFeign(dbDto);
+
+        PaymentCheckResponse paymentResponse = paymentClient.checkPayment(feignDto);
 
         booking.setPaymentUid(paymentResponse.paymentUid());
 

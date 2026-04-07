@@ -1,9 +1,9 @@
 package com.booking.payment.service;
 
-import com.booking.commondb.dto.PaymentCheckRequest;
-import com.booking.commondb.dto.PaymentCheckResponse;
+import com.booking.commondb.dto.PaymentCheckRequestDb;
+import com.booking.feignclients.dto.PaymentCheckResponse;
 
 public interface PaymentService {
 
-    PaymentCheckResponse checkPayment(PaymentCheckRequest request);
+    PaymentCheckResponse checkPayment(PaymentCheckRequestDb request);
 }

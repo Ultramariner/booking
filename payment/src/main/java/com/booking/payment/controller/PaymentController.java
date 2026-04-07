@@ -1,7 +1,7 @@
 package com.booking.payment.controller;
 
-import com.booking.commondb.dto.PaymentCheckRequest;
-import com.booking.commondb.dto.PaymentCheckResponse;
+import com.booking.commondb.dto.PaymentCheckRequestDb;
+import com.booking.feignclients.dto.PaymentCheckResponse;
 import com.booking.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class PaymentController {
 
     @PostMapping("/check")
     public ResponseEntity<PaymentCheckResponse> checkPayment(
-            @RequestBody PaymentCheckRequest request
+            @RequestBody PaymentCheckRequestDb request
     ) {
         PaymentCheckResponse response = paymentService.checkPayment(request);
         return ResponseEntity.ok(response);
