@@ -26,4 +26,4 @@ server:
 
 services:
   registrator:
-    url: http://registrator:8081/registrator
+    url: http://registrator:8081

@@ -26,6 +26,6 @@ server:
 
 services:
   generator:
-    url: http://generator:8080/generator
+    url: http://generator:8080
   payment:
-    url: http://payment:8082/payment
+    url: http://payment:8082
