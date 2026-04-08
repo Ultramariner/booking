@@ -10,7 +10,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 
-      SERVICES_REGISTRATOR_URL: http://registrator:8081/registrator
+      SERVICES_REGISTRATOR_URL: http://registrator:8081
     ports:
       - "8080:8080"
     depends_on:
@@ -26,8 +26,8 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 
-      SERVICES_GENERATOR_URL: http://generator:8080/generator
-      SERVICES_PAYMENT_URL: http://payment:8082/payment
+      SERVICES_GENERATOR_URL: http://generator:8080
+      SERVICES_PAYMENT_URL: http://payment:8082
     ports:
       - "8081:8081"
     depends_on:
@@ -43,6 +43,6 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 
-      SERVICES_REGISTRATOR_URL: http://registrator:8081/registrator
+      SERVICES_REGISTRATOR_URL: http://registrator:8081
     ports:
       - "8082:8082"

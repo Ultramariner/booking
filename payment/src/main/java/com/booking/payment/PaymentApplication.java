@@ -7,7 +7,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "com.booking.feignclients")
 @EnableJpaRepositories(basePackages = "com.booking.commondb")
 @EntityScan(basePackages = "com.booking.commondb")
 public class PaymentApplication {
