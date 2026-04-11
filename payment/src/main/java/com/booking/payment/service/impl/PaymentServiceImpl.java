@@ -5,6 +5,8 @@ import com.booking.commondb.dto.PaymentCheckResponseDb;
 import com.booking.commondb.entity.PaymentInfo;
 import com.booking.commondb.entity.PaymentStatus;
 import com.booking.commondb.repository.PaymentInfoRepository;
+import com.booking.commonkafka.dto.BookingRegisteredEvent;
+import com.booking.commonkafka.dto.PaymentCheckedEvent;
 import com.booking.feignclients.dto.PaymentCheckResponse;
 import com.booking.payment.mapper.PaymentResponseMapper;
 import com.booking.payment.service.PaymentService;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -46,5 +49,26 @@ public class PaymentServiceImpl implements PaymentService {
         );
 
         return paymentResponseMapper.toFeign(dbDto);
+    }
+
+    @Override
+    public PaymentCheckedEvent checkPaymentFromKafka(BookingRegisteredEvent event) {
+
+        boolean approved = ThreadLocalRandom.current().nextDouble() <= successProbability;
+
+        PaymentInfo info = new PaymentInfo();
+        info.setBookingId(event.getBookingId());
+        info.setPerson(event.getPerson());
+        info.setAmount(BigDecimal.valueOf(1000));
+        info.setProcessedAt(Instant.now());
+        info.setStatus(approved ? PaymentStatus.APPROVED : PaymentStatus.DENIED);
+
+        paymentInfoRepository.save(info);
+
+        PaymentCheckedEvent checked = new PaymentCheckedEvent();
+        checked.setBookingId(event.getBookingId());
+        checked.setPaid(approved);
+
+        return checked;
     }
 }

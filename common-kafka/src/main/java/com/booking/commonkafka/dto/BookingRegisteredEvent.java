@@ -6,4 +6,5 @@ import lombok.Data;
 public class BookingRegisteredEvent {
     private Long bookingId;
     private boolean registered;
+    private String person;
 }

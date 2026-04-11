@@ -7,6 +7,10 @@ import com.booking.commondb.entity.Resident;
 import com.booking.commondb.repository.ApartmentRepository;
 import com.booking.commondb.repository.BookingInfoRepository;
 import com.booking.commondb.repository.ResidentRepository;
+import com.booking.commonkafka.dto.BookingCompletedEvent;
+import com.booking.commonkafka.dto.BookingCreatedEvent;
+import com.booking.commonkafka.dto.BookingRegisteredEvent;
+import com.booking.commonkafka.dto.PaymentCheckedEvent;
 import com.booking.feignclients.clients.PaymentClient;
 import com.booking.feignclients.dto.BookingResponse;
 import com.booking.feignclients.dto.PaymentCheckRequest;
@@ -99,5 +103,61 @@ public class RegistrationServiceImpl implements RegistrationService {
         bookingInfoRepository.save(booking);
 
         return new BookingResponse(true, booking.getId());
+    }
+
+    @Override
+    public BookingRegisteredEvent registerFromKafka(BookingCreatedEvent event) {
+
+        Optional<Apartment> optional = checkApartments();
+        if (optional.isEmpty()) {
+            BookingRegisteredEvent failed = new BookingRegisteredEvent();
+            failed.setBookingId(event.getBookingId());
+            failed.setRegistered(false);
+            return failed;
+        }
+
+        Apartment apartment = optional.get();
+
+        BookingRequestDb request = new BookingRequestDb(
+                event.getBookingId(),
+                event.getResident()
+        );
+
+        BookingInfo booking = createBooking(apartment, request);
+
+        BookingRegisteredEvent registered = new BookingRegisteredEvent();
+        registered.setBookingId(booking.getId());
+        registered.setRegistered(true);
+        registered.setPerson(booking.getResident().getName());
+
+        return registered;
+    }
+
+    @Override
+    public BookingCompletedEvent completeBookingFromKafka(PaymentCheckedEvent event) {
+
+        BookingInfo booking = bookingInfoRepository.findById(event.getBookingId())
+                .orElseThrow(() -> new IllegalStateException("Booking not found: " + event.getBookingId()));
+
+        boolean paid = event.isPaid();
+
+        if (!paid) {
+            booking.setBookingStatus(BookingStatus.DENIED);
+
+            Apartment apartment = booking.getApartment();
+            apartment.setIsVacant(true);
+            apartmentRepository.save(apartment);
+
+        } else {
+            booking.setBookingStatus(BookingStatus.APPROVED);
+        }
+
+        bookingInfoRepository.save(booking);
+
+        BookingCompletedEvent completed = new BookingCompletedEvent();
+        completed.setBookingId(booking.getId());
+        completed.setSuccess(paid);
+
+        return completed;
     }
 }

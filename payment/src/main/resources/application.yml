@@ -23,10 +23,17 @@ spring:
 
   kafka:
     bootstrap-servers: kafka:9092
-    consumer:
-      group-id: payment
-      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
+        spring.json.add.type.headers: true
+    consumer:
+      group-id: generator
+      auto-offset-reset: earliest
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.use.type.headers: true
         spring.json.trusted.packages: "*"
 
 server:
