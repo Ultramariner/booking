@@ -21,6 +21,14 @@ spring:
     database-change-log-table: databasechangelog_payment
     database-change-log-lock-table: databasechangeloglock_payment
 
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: payment
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+
 server:
   port: 8082
 

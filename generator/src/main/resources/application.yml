@@ -21,6 +21,14 @@ spring:
     database-change-log-table: databasechangelog_generator
     database-change-log-lock-table: databasechangeloglock_generator
 
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: generator
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+
 server:
   port: 8080
 
