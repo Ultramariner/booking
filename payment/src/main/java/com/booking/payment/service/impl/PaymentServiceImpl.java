@@ -63,11 +63,12 @@ public class PaymentServiceImpl implements PaymentService {
         info.setProcessedAt(Instant.now());
         info.setStatus(approved ? PaymentStatus.APPROVED : PaymentStatus.DENIED);
 
-        paymentInfoRepository.save(info);
+        info = paymentInfoRepository.save(info);
 
         PaymentCheckedEvent checked = new PaymentCheckedEvent();
-        checked.setBookingId(event.getBookingId());
+        checked.setBookingId(info.getBookingId());
         checked.setPaid(approved);
+        checked.setPaymentUid(info.getUid());
 
         return checked;
     }

@@ -18,6 +18,7 @@ import com.booking.feignclients.dto.PaymentCheckResponse;
 import com.booking.commondb.dto.*;
 import com.booking.registrator.mapper.PaymentRequestMapper;
 import com.booking.registrator.service.RegistrationService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public BookingInfo createBooking(Apartment apartment, BookingRequestDb request) {
 
         apartment.setIsVacant(false);
-        apartmentRepository.save(apartment);
+        apartment = apartmentRepository.save(apartment);
 
         Resident resident = new Resident();
         resident.setGeneratedId(request.id());
@@ -106,6 +107,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
+    @Transactional
     public BookingRegisteredEvent registerFromKafka(BookingCreatedEvent event) {
 
         Optional<Apartment> optional = checkApartments();
@@ -152,6 +154,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             booking.setBookingStatus(BookingStatus.APPROVED);
         }
 
+        booking.setPaymentUid(event.getPaymentUid());
         bookingInfoRepository.save(booking);
 
         BookingCompletedEvent completed = new BookingCompletedEvent();
