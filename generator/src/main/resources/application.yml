@@ -42,3 +42,12 @@ server:
 services:
   registrator:
     url: http://registrator:8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
